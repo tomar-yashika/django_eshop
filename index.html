@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load cart %}
+
+<!--body-->
+   <div class="container-fluid mx-auto mt-3">
+    
+        <div class="row">
+
+            <!--filter-->
+        <div class="col-lg-3 mx-auto">
+            <div class="list-group">
+                <a href="/" class="list-group-item list-group-item-action list-group-item-success">All Products</a>
+              {% for item in categories %}
+                <a href="/?category={{item.id}}" class="list-group-item list-group-item-action list-group-item-success">{{item.name}}</a>
+               {% endfor %}
+              
+            </div>
+
+            <div class="list-group">
+                <a href="/" class="list-group-item list-group-item-action list-group-item-success">All Products</a>
+              {% for item in categories %}
+                <a href="/?category={{item.id}}" class="list-group-item list-group-item-action list-group-item-success">{{item.name}}</a>
+               {% endfor %}
+
+            </div>
+
+        </div>
+            <!--all products-->
+            <div id="products" class="col-lg-9 mx-auto" >
+                <div class="row mx-auto mb-3">
+                    {% for product in products %}
+                
+                                <div class="card mx-auto mb-3 p-3" id="{{product.id}}" style="width: 18rem;">
+                                    <img src="{{product.image.url}}" class="img-fluid" class="card-img-top" alt="{{product.name}}" >
+                                    <div class="card-body">
+                                    <h5 class="card-title">{{product.name}}</h5>
+                                    <p class="card-text">{{product.description}}</p>
+                                    </div>
+
+
+
+                                    <div class="card-footer row no-gutters">
+                                        {% if product|is_in_cart:request.session.cart %}
+                                            <div class="row" >
+                                                <form action="/#{{product.id}}" class="col-2" method="post">
+                                                    {% csrf_token %}
+                                                    <input hidden type="text" value="{{product.id}}" name="product">
+                                                    <input hidden type="text" value="True" name="remove">
+                                                    <input type="submit" value="-" class="btn btn-block btn-success">
+                                                </form>
+                                                <div class="text-center col">{{product|cart_quantity:request.session.cart}} in cart</div>
+                                                <form action="/#{{product.id}}" class="col-2" method="post">
+                                                    {% csrf_token %}
+                                                    <input hidden type="text" value="{{product.id}}" name="product">
+                                                    <input type="submit" value="+" class="btn btn-block btn-success">
+                                                </form>
+                                            </div>
+                                        {% else %}
+                                            <form action="/#{{product.id}}" method="post" class="btn-block">
+                                            {% csrf_token %}
+                                                <input hidden type="text" value="{{product.id}}" name="product">
+                                                <input type="submit" class="float-right btn-block btn btn-light border form-control" value="Add To Cart">
+                                            </form>
+
+
+
+
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    
+   </div>
+{% endblock %}
+
+   
+  
+   
+
+
+
